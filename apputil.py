@@ -19,10 +19,11 @@ def update_board(current_board):
                 for dj in [-1, 0, 1]:
                     if di == 0 and dj == 0:  # Skip the cell itself
                         continue
-                    # Use modulo to wrap around edges
-                    ni = (i + di) % rows
-                    nj = (j + dj) % cols
-                    neighbor_count += current_board[ni, nj]
+                    ni = i + di
+                    nj = j + dj
+                    # Only count neighbors within board bounds (no wrapping)
+                    if 0 <= ni < rows and 0 <= nj < cols:
+                        neighbor_count += current_board[ni, nj]
             
             # Apply Conway's Game of Life rules
             if current_board[i, j] == 1:  # Cell is alive
@@ -37,6 +38,7 @@ def update_board(current_board):
                     updated_board[i, j] = 0  # Stays dead
     
     return updated_board
+
 
 
 
