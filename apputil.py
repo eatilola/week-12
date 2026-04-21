@@ -6,10 +6,38 @@ import matplotlib.pyplot as plt
 
 
 def update_board(current_board):
-    # your code here ...
-    updated_board = current_board
-
+    # Get board dimensions
+    rows, cols = current_board.shape
+    updated_board = np.zeros_like(current_board)
+    
+    # For each cell in the board
+    for i in range(rows):
+        for j in range(cols):
+            # Count live neighbors
+            neighbor_count = 0
+            for di in [-1, 0, 1]:
+                for dj in [-1, 0, 1]:
+                    if di == 0 and dj == 0:  # Skip the cell itself
+                        continue
+                    # Use modulo to wrap around edges
+                    ni = (i + di) % rows
+                    nj = (j + dj) % cols
+                    neighbor_count += current_board[ni, nj]
+            
+            # Apply Conway's Game of Life rules
+            if current_board[i, j] == 1:  # Cell is alive
+                if neighbor_count in [2, 3]:
+                    updated_board[i, j] = 1  # Survives
+                else:
+                    updated_board[i, j] = 0  # Dies
+            else:  # Cell is dead
+                if neighbor_count == 3:
+                    updated_board[i, j] = 1  # Becomes alive
+                else:
+                    updated_board[i, j] = 0  # Stays dead
+    
     return updated_board
+
 
 
 def show_game(game_board, n_steps=10, pause=0.5):
